@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>NYU - chat</title>
+</head>
+<body>
+	<h1>Express 3.0 + Socket.IO</h1>
+	<input id="message"></input>
+	<input id="button" type="button" value="Ping server"/>
+
+	<hr>
+	<div id="msgbox"></div>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+
+	<script>
+		var socket = io.connect('http://localhost:3001'); 
+		socket.on('connect', function(){
+			console.log('im connected');
+		});  
+
+		socket.on('pong', function(data)
+			{
+				$('#msgbox').append(data.txt + "<br>"); 
+			});
+
+		$('#button').click(function(){
+			$('#msgbox').append('Sending message<br>');
+			var text = $('#message').val();
+			console.log(text);
+			socket.emit('ping', {txt: text}); 
+			socket.emit('ping', {txt: 'this is a message from client'});
+		});
+	</script>
+</body>
+</html>
